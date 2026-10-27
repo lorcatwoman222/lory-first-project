@@ -82,13 +82,29 @@
       showMessage(question, "user");
       input.value = "";
 
-      let answer = "هذا بوت تجريبي. قريباً سأقدر أجاوبك بناءً على معلومات الشركة.";
+      
+fetch("./company-info.json")
+  .then(response => {
+    if (!response.ok) throw new Error("File not found");
+    return response.json();
+  })
+  .then(company => {
+    let answer = "ما عندي معلومات عن هذا السؤال.";
 
-      if (/مرحبا|السلام|هلا/.test(question)) {
-        answer = "يا هلا وسهلا! كيف أقدر أخدمك؟";
-      }
+    if (/خدمات|تقدمون|تسوون/.test(question)) {
+      answer = "خدماتنا: " + company.services.join("، ");
+    } else if (/اسم|مين|الشركة/.test(question)) {
+      answer = "نحن " + company.company_name + "، " + company.description;
+    } else if (/مرحبا|السلام|هلا/.test(question)) {
+      answer = "أهلاً بك! كيف أقدر أساعدك؟";
+    }
 
-      showMessage(answer, "bot");
+    showMessage(answer, "bot");
+  })
+  .catch(() => {
+    showMessage("تعذر تحميل معلومات الشركة.", "bot");
+  });
+
     });
   </script>
 </body>
