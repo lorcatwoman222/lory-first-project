@@ -83,27 +83,25 @@
       input.value = "";
 
       
-fetch("./company-info.json")
-  .then(response => {
-    if (!response.ok) throw new Error("File not found");
-    return response.json();
-  })
-  .then(company => {
-    let answer = "ما عندي معلومات عن هذا السؤال.";
 
-    if (/خدمات|تقدمون|تسوون/.test(question)) {
-      answer = "خدماتنا: " + company.services.join("، ");
-    } else if (/اسم|مين|الشركة/.test(question)) {
-      answer = "نحن " + company.company_name + "، " + company.description;
-    } else if (/مرحبا|السلام|هلا/.test(question)) {
-      answer = "أهلاً بك! كيف أقدر أساعدك؟";
-    }
+fetch("https://lory-company-assistant.loryanalsayid.workers.dev/", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({ question: question })
+})
+.then(response => {
+  if (!response.ok) throw new Error("Request failed");
+  return response.json();
+})
+.then(data => {
+  showMessage(data.answer || "تعذر إنشاء الرد.", "bot");
+})
+.catch(() => {
+  showMessage("تعذر الاتصال بالمساعد. حاولي مرة ثانية.", "bot");
+});
 
-    showMessage(answer, "bot");
-  })
-  .catch(() => {
-    showMessage("تعذر تحميل معلومات الشركة.", "bot");
-  });
 
     });
   </script>
