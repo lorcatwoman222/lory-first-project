@@ -124,7 +124,9 @@ input {
     function showMessage(text, type) {
       const item = document.createElement("div");
       item.className = "message " + type;
-      item.textContent = text;
+      
+item.textContent = type === "bot" ? text.replace(/\*\*/g, "") : text;
+
       messages.appendChild(item);
       messages.scrollTop = messages.scrollHeight;
     }
