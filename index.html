@@ -110,6 +110,13 @@ input {
       </div>
     </div>
 
+<div style="display:flex; flex-wrap:wrap; gap:8px; margin:12px 0;">
+  <button type="button" onclick="document.getElementById('question').value='ما المنتجات المتوفرة؟'; document.getElementById('chatForm').requestSubmit()">🛍️ المنتجات</button>
+  <button type="button" onclick="document.getElementById('question').value='ما أسعار المنتجات؟'; document.getElementById('chatForm').requestSubmit()">💰 الأسعار</button>
+  <button type="button" onclick="document.getElementById('question').value='كم تكلفة الشحن ومدة التوصيل؟'; document.getElementById('chatForm').requestSubmit()">🚚 الشحن</button>
+  <button type="button" onclick="document.getElementById('question').value='ما سياسة الاسترجاع؟'; document.getElementById('chatForm').requestSubmit()">🔄 الاسترجاع</button>
+</div>
+
     <form id="chatForm">
       <input id="question" placeholder="اكتب سؤالك هنا..." required>
       <button type="submit">إرسال</button>
