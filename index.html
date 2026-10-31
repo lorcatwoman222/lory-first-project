@@ -146,6 +146,12 @@ item.textContent = type === "bot" ? text.replace(/\*\*/g, "") : text;
       showMessage(question, "user");
       input.value = "";
 
+const typingMessage = document.createElement("div");
+typingMessage.className = "message bot";
+typingMessage.textContent = "💬 جاري كتابة الرد...";
+messages.appendChild(typingMessage);
+messages.scrollTop = messages.scrollHeight;
+
       
 
 fetch("https://lory-store-assistant.loryanalsayid.workers.dev/", {
@@ -160,11 +166,16 @@ fetch("https://lory-store-assistant.loryanalsayid.workers.dev/", {
   return response.json();
 })
 .then(data => {
+typingMessage.remove();
+
   showMessage(data.answer || "تعذر إنشاء الرد.", "bot");
 })
+
 .catch(() => {
+  typingMessage.remove();
   showMessage("تعذر الاتصال بالمساعد. حاولي مرة ثانية.", "bot");
 });
+
 
 
     });
