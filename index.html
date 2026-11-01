@@ -194,10 +194,15 @@ item.appendChild(rating);
       messages.scrollTop = messages.scrollHeight;
     }
 
+let isSending = false;
+
     form.addEventListener("submit", function(event) {
       event.preventDefault();
       const question = input.value.trim();
       if (!question) return;
+
+if (isSending) return;
+isSending = true;
 
       showMessage(question, "user");
       input.value = "";
@@ -230,7 +235,9 @@ typingMessage.remove();
 .catch(() => {
   typingMessage.remove();
   showMessage("تعذر الاتصال بالمساعد. حاولي مرة ثانية.", "bot");
-});
+
+}).finally(() => { isSending = false; });
+
 
 
 
