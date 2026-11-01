@@ -195,7 +195,7 @@ item.appendChild(rating);
     }
 
 let isSending = false;
-
+const sendButton = form.querySelector('button[type="submit"]');
     form.addEventListener("submit", function(event) {
       event.preventDefault();
       const question = input.value.trim();
@@ -203,6 +203,9 @@ let isSending = false;
 
 if (isSending) return;
 isSending = true;
+
+sendButton.disabled = true;
+sendButton.textContent = "⏳ جاري الرد...";
 
       showMessage(question, "user");
       input.value = "";
@@ -236,8 +239,12 @@ typingMessage.remove();
   typingMessage.remove();
   showMessage("تعذر الاتصال بالمساعد. حاولي مرة ثانية.", "bot");
 
-}).finally(() => { isSending = false; });
 
+}).finally(() => {
+  isSending = false;
+  sendButton.disabled = false;
+  sendButton.textContent = "إرسال";
+});
 
 
 
