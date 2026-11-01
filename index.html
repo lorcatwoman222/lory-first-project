@@ -167,6 +167,27 @@ if (type === "bot") {
   };
 
   item.appendChild(copyBtn);
+
+const rating = document.createElement("div");
+rating.style.cssText = "margin-top:8px; font-size:12px;";
+rating.textContent = "هل كان الرد مفيدًا؟ ";
+
+["👍", "👎"].forEach((emoji) => {
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.textContent = emoji;
+  btn.style.cssText = "padding:4px 8px; margin:3px;";
+
+  btn.onclick = () => {
+    rating.textContent = emoji === "👍"
+      ? "👍 اخترت: رد مفيد"
+      : "👎 اخترت: رد غير مفيد";
+  };
+
+  rating.appendChild(btn);
+});
+
+item.appendChild(rating);
 }
 
       messages.appendChild(item);
