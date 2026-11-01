@@ -154,6 +154,21 @@ timeStamp.textContent = new Date().toLocaleTimeString("ar-SA", {
 timeStamp.style.cssText = "font-size: 11px; opacity: 0.65; margin-top: 5px;";
 item.appendChild(timeStamp);
 
+if (type === "bot") {
+  const copyBtn = document.createElement("button");
+  copyBtn.type = "button";
+  copyBtn.textContent = "📋 نسخ الرد";
+  copyBtn.style.cssText = "font-size:11px; padding:4px 8px; margin-top:6px;";
+
+  copyBtn.onclick = () => {
+    navigator.clipboard.writeText(text.replace(/\*\*/g, ""))
+      .then(() => { copyBtn.textContent = "✅ تم النسخ"; })
+      .catch(() => { copyBtn.textContent = "تعذر النسخ"; });
+  };
+
+  item.appendChild(copyBtn);
+}
+
       messages.appendChild(item);
       messages.scrollTop = messages.scrollHeight;
     }
