@@ -128,15 +128,39 @@ input {
 
 <button type="button" onclick="location.reload()">🔄 محادثة جديدة</button>
 
-<button type="button" id="contactAgentBtn" onclick="alert('هذه نسخة تجريبية. سيتم تفعيل التواصل مع موظف عند تخصيص البوت للشركة.')">👩‍💼 التواصل مع موظف</button>
+
+<button type="button" id="contactAgentBtn" onclick="contactHuman()">👩‍💼 التواصل مع موظف</button>
 
     <form id="chatForm">
       <input id="question" placeholder="اكتب سؤالك هنا..." required>
       <button type="submit">إرسال</button>
     </form>
   </div>
+<script>
+async function contactHuman() {
+  try {
+    const response = await fetch("https://raw.githubusercontent.com/lorcatwoman222/lory-first-project/lory-development/companies/lory-store.json");
 
-  <script>
+    if (!response.ok) throw new Error("Failed");
+
+    const company = await response.json();
+    const support = company.human_support;
+
+    if (!support || !support.enabled || !support.url) {
+      alert("التواصل مع موظف غير مفعّل في النسخة التجريبية.");
+      return;
+    }
+
+    const link = new URL(support.url);
+    if (link.protocol !== "https:") throw new Error("Invalid link");
+
+    window.open(link.href, "_blank", "noopener,noreferrer");
+  } catch (error) {
+    alert("تعذر فتح خدمة العملاء حاليًا.");
+  }
+}
+
+ 
     const form = document.getElementById("chatForm");
     const input = document.getElementById("question");
     const messages = document.getElementById("messages");
