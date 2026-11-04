@@ -112,7 +112,11 @@ input {
 </head>
 <body>
   <div class="chat">
-    <h2>🤖 مساعد متجر لوري</h2>
+   
+<h2 id="storeTitle">🤖 مساعد متجر لوري</h2>
+
+<div class="message bot" id="welcomeMessage">
+
     <div id="messages">
       <div class="message bot">
         أهلًا بك في متجر لوري! 💙🛍️ أنا مساعدك الذكي، أقدر أساعدك في المنتجات والأسعار والشحن والاسترجاع. كيف أقدر أخدمك اليوم؟
@@ -137,10 +141,33 @@ input {
     </form>
   </div>
 <script>
+const companyId = new URLSearchParams(window.location.search).get("company_id") || "lory-store";
+
+const storeTitle = document.getElementById("storeTitle");
+const welcomeMessage = document.getElementById("welcomeMessage");
+
+storeTitle.textContent = "🤖 جاري تحميل المتجر...";
+welcomeMessage.textContent = "جاري تحميل معلومات المتجر...";
+
+fetch(`https://raw.githubusercontent.com/lorcatwoman222/lory-first-project/lory-development/companies/${encodeURIComponent(companyId)}.json`)
+  .then(response => {
+    if (!response.ok) throw new Error("Company not found");
+    return response.json();
+  })
+  .then(company => {
+    storeTitle.textContent = "🤖 مساعد " + company.company_name;
+    welcomeMessage.textContent = "أهلًا بك في " + company.company_name + "! أنا مساعدك الذكي، كيف أقدر أخدمك اليوم؟";
+  })
+  .catch(() => {
+    storeTitle.textContent = "🤖 المتجر غير متاح";
+    welcomeMessage.textContent = "تعذر تحميل معلومات المتجر.";
+  });
+
 async function contactHuman() {
   try {
-    const response = await fetch("https://raw.githubusercontent.com/lorcatwoman222/lory-first-project/lory-development/companies/lory-store.json");
-
+    
+const response = await fetch(`https://raw.githubusercontent.com/lorcatwoman222/lory-first-project/lory-development/companies/${encodeURIComponent(companyId)}.json`);
+    
     if (!response.ok) throw new Error("Failed");
 
     const company = await response.json();
@@ -252,7 +279,9 @@ fetch("https://lory-store-assistant-dev.loryanalsayid.workers.dev/", {
     "Content-Type": "application/json"
   },
   
-body: JSON.stringify({ question: question, company_id: "lory-store" })
+
+body: JSON.stringify({ question: question, company_id: companyId })
+
 
 })
 .then(response => {
