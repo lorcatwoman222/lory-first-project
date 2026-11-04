@@ -93,7 +93,9 @@ h2 {
 
 
 button {
-  background: #38bdf8 !important;
+
+background: var(--brand-color, #38bdf8) !important;
+
   color: #082f49 !important;
   border-radius: 12px;
 }
@@ -102,7 +104,10 @@ button {
  
 
 button:hover {
-background: #7dd3fc !important;
+
+background: var(--brand-color, #38bdf8) !important;
+filter: brightness(1.1);
+
 }
 input {
   border: 1px solid #cbd5e1;
@@ -113,7 +118,10 @@ input {
 <body>
   <div class="chat">
    
-<h2 id="storeTitle">🤖 مساعد متجر لوري</h2>
+
+<img id="storeLogo" alt="شعار المتجر" style="display:none; width:64px; height:64px; object-fit:contain; margin:0 auto 8px;">
+
+    <h2 id="storeTitle">🤖 مساعد متجر لوري</h2>
 
 
 <div id="messages">
@@ -123,7 +131,9 @@ input {
 </div>
 
 
-<div style="display:flex; flex-wrap:wrap; gap:8px; margin:12px 0;">
+
+<div id="quickQuestions" style="display:flex; flex-wrap:wrap; gap:8px; margin:12px 0;">
+
   <button type="button" onclick="document.getElementById('question').value='ما المنتجات المتوفرة؟'; document.getElementById('chatForm').requestSubmit()">🛍️ المنتجات</button>
   <button type="button" onclick="document.getElementById('question').value='ما أسعار المنتجات؟'; document.getElementById('chatForm').requestSubmit()">💰 الأسعار</button>
   <button type="button" onclick="document.getElementById('question').value='كم تكلفة الشحن ومدة التوصيل؟'; document.getElementById('chatForm').requestSubmit()">🚚 الشحن</button>
@@ -146,6 +156,8 @@ const companyId = new URLSearchParams(window.location.search).get("company_id") 
 const storeTitle = document.getElementById("storeTitle");
 const welcomeMessage = document.getElementById("welcomeMessage");
 
+const quickQuestions = document.getElementById("quickQuestions");
+
 storeTitle.textContent = "🤖 جاري تحميل المتجر...";
 welcomeMessage.textContent = "جاري تحميل معلومات المتجر...";
 
@@ -155,7 +167,39 @@ fetch(`https://raw.githubusercontent.com/lorcatwoman222/lory-first-project/lory-
     return response.json();
   })
   .then(company => {
-    storeTitle.textContent = "🤖 مساعد " + company.company_name;
+    
+if (Array.isArray(company.quick_questions) && company.quick_questions.length > 0) {
+  quickQuestions.replaceChildren();
+
+  company.quick_questions.forEach((text) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = text;
+
+    button.onclick = () => {
+      document.getElementById("question").value = text;
+      document.getElementById("chatForm").requestSubmit();
+    };
+
+    quickQuestions.appendChild(button);
+  });
+}
+
+document.documentElement.style.setProperty("--brand-color", company.brand_color || "#38bdf8");
+    
+const storeLogo = document.getElementById("storeLogo");
+
+if (company.logo_url) {
+  storeLogo.src = company.logo_url;
+  storeLogo.style.display = "block";
+} else {
+  storeLogo.style.display = "none";
+}
+
+
+    
+storeTitle.textContent = (company.logo_url ? "" : "🤖 ") + "مساعد " + company.company_name;
+
     welcomeMessage.textContent = "أهلًا بك في " + company.company_name + "! أنا مساعدك الذكي، كيف أقدر أخدمك اليوم؟";
   })
   .catch(() => {
@@ -174,7 +218,9 @@ const response = await fetch(`https://raw.githubusercontent.com/lorcatwoman222/l
     const support = company.human_support;
 
     if (!support || !support.enabled || !support.url) {
-      alert("التواصل مع موظف غير مفعّل في النسخة التجريبية.");
+      
+alert("🧪 هذه تجربة توضيحية. عند تفعيل الخدمة، سيتم توجيه العميل إلى موظف خدمة العملاء عبر وسيلة التواصل الخاصة بالشركة.");
+
       return;
     }
 
