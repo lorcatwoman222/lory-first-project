@@ -2,6 +2,11 @@
 {
   "company_id": "perfume-demo",
   "company_name": "متجر العطور التجريبي",
+  
+"brand_color": "#7c3aed",
+
+"logo_url": "",
+
   "description": "متجر إلكتروني تجريبي متخصص في بيع العطور.",
   "services": [
     "عرض العطور والأسعار",
