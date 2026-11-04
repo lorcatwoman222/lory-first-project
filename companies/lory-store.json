@@ -3,6 +3,9 @@
 "company_id": "lory-store",
 
   "company_name": "متجر لوري التجريبي",
+"brand_color": "#38bdf8",
+"logo_url": "",
+
   "description": "متجر إلكتروني تجريبي لبيع الهدايا والإكسسوارات والمنتجات اليومية",
   "services": [
     "عرض المنتجات والأسعار",
